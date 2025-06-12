@@ -1,14 +1,17 @@
 import React from "react";
+import { useModal } from "../../hooks/UseModal";
 
 type ModalTriggerProps = {
   asChild: boolean;
   children: React.ReactElement;
 };
 export function ModalTrigger({ asChild, children }: ModalTriggerProps) {
+  const { openModal } = useModal();
+
   if (asChild) {
     return React.cloneElement(children, {
-      onClick: () => console.log("Modal Trigger Clicked"),
+      onClick: () => openModal(),
     });
   }
-  return <button onClick={() => {}}>open</button>;
+  return <button onClick={() => openModal()}>open</button>;
 }
