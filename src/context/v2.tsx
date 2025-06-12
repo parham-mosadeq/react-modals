@@ -1,4 +1,4 @@
-import {
+import React, {
   createContext,
   useCallback,
   useContext,
@@ -25,9 +25,9 @@ export function useV2Context() {
 type V2Props = {
   children: ReactNode;
 };
-
 export function V2({ children }: V2Props) {
   const [modals, setModals] = useState<Record<string, ReactNode>>({});
+  const [openModals, setOpenModals] = useState<Set<string>>(new Set());
 
   const registerModal = useCallback((id: string, modal: ReactNode) => {
     setModals((prev) => ({ ...prev, [id]: modal }));
@@ -39,29 +39,47 @@ export function V2({ children }: V2Props) {
       delete copy[id];
       return copy;
     });
+    setOpenModals((prev) => {
+      const copy = new Set(prev);
+      copy.delete(id);
+      return copy;
+    });
+  }, []);
+
+  const openModal = useCallback((id: string) => {
+    setOpenModals((prev) => new Set(prev).add(id));
+  }, []);
+
+  const closeModal = useCallback((id: string) => {
+    setOpenModals((prev) => {
+      const copy = new Set(prev);
+      copy.delete(id);
+      return copy;
+    });
   }, []);
 
   return (
     <V2Context.Provider
-      value={{
-        registerModal,
-        unregisterModal,
-      }}>
+      value={{ registerModal, unregisterModal, openModal, closeModal }}>
       {children}
       <Portal>
-        {Object.entries(modals).map(([id, modal]) => (
-          <div
-            key={id}
-            id={`modal-container-${id}`}
-            className="fixed inset-0 bg-black/50 flex justify-center items-center"
-            onClick={() => unregisterModal(id)}>
+        {Array.from(openModals).map((id) => {
+          const modal = modals[id];
+          if (!modal) return null;
+          return (
             <div
-              className="bg-white rounded-lg p-6 max-w-lg w-full"
-              onClick={(e) => e.stopPropagation()}>
-              {modal}
+              key={id}
+              id={`modal-container-${id}`}
+              className="fixed inset-0 bg-black/50 flex justify-center items-center"
+              onClick={() => closeModal(id)}>
+              <div
+                className="bg-white rounded-lg p-6 max-w-lg w-full"
+                onClick={(e) => e.stopPropagation()}>
+                {modal}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </Portal>
     </V2Context.Provider>
   );
