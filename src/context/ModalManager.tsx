@@ -1,13 +1,8 @@
-import { createContext, useState } from "react";
+import { useState, type PropsWithChildren } from "react";
+import { ModalManagerCtx } from "./managerCtx";
 
-type ModalManagerCtxTypes = {
-  modals: string[];
-  registerModal: (modalKey: string) => void;
-  unRegisterModal: (modalKey: string) => void;
-};
-export const ModalManagerCtx = createContext<ModalManagerCtxTypes | null>(null);
-
-export default function ModalManager() {
+type ModalManagerProps = PropsWithChildren;
+export default function ModalManager({ children }: ModalManagerProps) {
   const [modals, setModals] = useState<string[]>([]);
   const registerModal = (key: string) => {
     setModals((prev) => {
@@ -27,7 +22,7 @@ export default function ModalManager() {
   const value = { registerModal, unRegisterModal, modals };
   return (
     <ModalManagerCtx.Provider value={value}>
-      ModalManager
+      {children}
     </ModalManagerCtx.Provider>
   );
 }
