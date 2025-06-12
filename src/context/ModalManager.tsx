@@ -5,6 +5,7 @@ type ModalManagerProps = PropsWithChildren;
 export default function ModalManager({ children }: ModalManagerProps) {
   const [modals, setModals] = useState<string[]>([]);
   const registerModal = (key: string) => {
+    console.log(key);
     setModals((prev) => {
       if (prev.includes(key)) {
         return prev;
@@ -18,7 +19,7 @@ export default function ModalManager({ children }: ModalManagerProps) {
     const filteredModals = modals.filter((modalKey) => modalKey !== key);
     setModals(filteredModals);
   };
-
+  console.log("--- modals", modals);
   const value = { registerModal, unRegisterModal, modals };
   return (
     <ModalManagerCtx.Provider value={value}>

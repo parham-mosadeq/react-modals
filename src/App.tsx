@@ -1,17 +1,11 @@
-import { Modal } from "./components/modal/modal.atom";
+import FormModal from "./components/form-modal/FormModal";
 import ModalManager from "./context/ModalManager";
 
 export default function App() {
   return (
     <ModalManager>
       <div>
-        <Modal>
-          <Modal.ModalTrigger />
-          <Modal.ModalContent>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio,
-            praesentium.
-          </Modal.ModalContent>
-        </Modal>
+        <FormModal />
       </div>
     </ModalManager>
   );

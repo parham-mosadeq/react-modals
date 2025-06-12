@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 import { useModal } from "../../hooks/UseModal";
 
 type ModalTriggerProps = {
@@ -6,11 +6,15 @@ type ModalTriggerProps = {
   children?: React.ReactElement;
 };
 export function ModalTrigger({ asChild, children }: ModalTriggerProps) {
-  const { openModal } = useModal();
-
+  const id = useId();
+  const { openModal, setId } = useModal();
+  const handleClick = () => {
+    setId(id);
+    openModal();
+  };
   if (asChild && React.isValidElement(children)) {
     return React.cloneElement(children, {
-      onClick: openModal,
+      onClick: handleClick,
       className:
         "text-white bg-blue-600 rounded-md px-2 py-3 w-full hover:to-blue-400",
     });
@@ -18,7 +22,7 @@ export function ModalTrigger({ asChild, children }: ModalTriggerProps) {
   return (
     <button
       className="text-white bg-blue-600 rounded-md px-2 py-3 w-full hover:to-blue-400 cursor-pointer"
-      onClick={openModal}>
+      onClick={handleClick}>
       open
     </button>
   );

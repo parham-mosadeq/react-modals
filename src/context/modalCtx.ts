@@ -1,7 +1,11 @@
 import React from "react";
 
-export const ModalCtx = React.createContext({
-  openModal: () => {},
-  closeModal: () => {},
-  isOpen: false,
-});
+type ModalCtxType = {
+  openModal: () => void;
+  closeModal: () => void;
+  isOpen: boolean;
+  id?: string;
+  setId?: (modalId: string) => void;
+};
+
+export const ModalCtx = React.createContext<ModalCtxType | null>(null);
