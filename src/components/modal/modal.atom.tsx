@@ -7,7 +7,10 @@ type ModalProps = PropsWithChildren;
 export function Modal({ children }: ModalProps) {
   return (
     <ModalContext>
-      <div>{children}</div>;
+      <div className="w-[500px] bg-slate-400 px-2 py-3 rounded-md">
+        {children}
+      </div>
+      ;
     </ModalContext>
   );
 }

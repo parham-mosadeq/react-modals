@@ -6,7 +6,7 @@ export default function ModalContext({ children }: ModalContextProps) {
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
-
+  console.log("==== Modal CTX =>", "isOpen", isOpen);
   const value = {
     openModal,
     closeModal,
