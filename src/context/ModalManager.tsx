@@ -24,6 +24,14 @@ export default function ModalManager({ children }: ModalManagerProps) {
   return (
     <ModalManagerCtx.Provider value={value}>
       {children}
+      {modals.map((modal) => {
+        return (
+          <div key={modal}>
+            {modal}
+            hello wrold
+          </div>
+        );
+      })}
     </ModalManagerCtx.Provider>
   );
 }
