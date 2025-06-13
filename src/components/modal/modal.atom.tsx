@@ -1,19 +1,29 @@
-import type { PropsWithChildren } from "react";
-import { ModalTrigger } from "./ModalTrigger";
-import ModalContent from "./ModalContent";
-import ModalContext from "../../context/modal.context";
+import React, { useEffect, type ReactElement, type ReactNode } from "react";
+import { useDialog } from "../../hooks/useDialog";
 
-type ModalProps = PropsWithChildren;
-export function Modal({ children }: ModalProps) {
-  return (
-    <ModalContext>
-      <div className="w-[500px] bg-slate-400 px-2 py-3 rounded-md">
-        {children}
-      </div>
-      ;
-    </ModalContext>
-  );
-}
+export const Dialog = {
+  Trigger: ({
+    children,
+    modalId,
+  }: {
+    children: ReactElement;
+    modalId: string;
+  }) => {
+    const { open } = useDialog();
 
-Modal.ModalTrigger = ModalTrigger;
-Modal.ModalContent = ModalContent;
+    return React.cloneElement(children, {
+      onClick: () => open(modalId),
+    });
+  },
+
+  Content: ({ children, id }: { children: ReactNode; id: string }) => {
+    const { registerContent, unregisterContent } = useDialog();
+
+    useEffect(() => {
+      registerContent(id, children);
+      return () => unregisterContent(id);
+    }, [children, id, registerContent, unregisterContent]);
+
+    return null;
+  },
+};
